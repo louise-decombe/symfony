@@ -1,10 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BlogController!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
 
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('assets/picture/home-bg.jpg')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="site-heading">
+                        <h1> Blog</h1>
+                        <span class="subheading">Mon blog avec Symfony5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
 
+                {% for articles in articles %}
+                <div class="post-preview">
+
+                    <a href="blog/{{ articles.id }}">
+                        <h2 class="post-title">
+                            {{ articles.title }}
+                        </h2>
+                        <h3 class="post-subtitle">
+                            {{ articles.subtitle }}
+                        </h3>
+                    </a>
+                    <img src="{{ articles.image }}"/>
+                    <p class="post-meta">Posted by {{ articles.author }}
+                        <a href="#">{{ articles.category.title }}</a>
+                        {{ articles.createdAt | date('d/m/Y') }}    </p>
+
+                    <a href="{{ path('blog_like', { 'id': articles.id }) }}" class="btn js-like">
+
+                        {% if app.user and articles.isLikedByUser(app.user) %}
+                            <i class="fa fa-thumbs-up"></i>
+                        {% else %}
+                            <i class="far fa-thumbs-up"></i>
+                        {% endif %}
+
+                        <span class="js-likes">{{ articles.likes | length }}</span>
+                        <span class="js-label">J'aime</span>
+                    </a>
+
+                    {% endfor %}
+                </div>
+                <hr>
+                <!-- Pager -->
+                <div class="clearfix">
+                    
+                    <a class="btn btn-primary float-right" href="#">Plus d'articles &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
 
 {% endblock %}
+

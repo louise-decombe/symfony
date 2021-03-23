@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block body %}
+    <header class="masthead" style="background-image: url('img/post-bg.jpg')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="post-heading">
+
+                        <h1>   {{ article.title }}
+                        </h1>
+                        <h2 class="subheading">{{ article.subtitle }}</h2>
+                        <span class="meta">Posted by
+                         <a href="#"> {{ article.author }}</a> le
+                            {{ article.createdAt | date('d/m/Y') }}   </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+        <div class="container">
+            <a href="{{ path('blog') }}">Retour</a>
+
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <p> {{ article.text }} </p>
+                </div>
+            </div>
+
+        </div>
+        <div class="card">
+            <div class="container">
+                <div class="control-group">
+                    <h1> {{ article.comments | length }} commentaire(s)</h1>
+
+                    {% for comment in article.comments %}
+                    <div class="post-preview">
+                        <p class="post-title">
+                            {{ comment.author }}                        </p>
+                        <h5 class="post-subtitle">
+                            {{ comment.content }}                               </h5>
+                        <p>    {{ comment.createdAt | date('d/m/Y') }}    </p>
+
+                        {% endfor %}
+
+                        {% if app.user %}
+
+                        <h2>Ajouter un commentaire</h2>
+
+                        {{ form_start(commentForm) }}
+                        {{ form_row(commentForm.author) }}
+                        {{ form_row(commentForm.content) }}
+                        {{ form_end(commentForm) }}
+
+                    </div>
+                {% else %}
+                    <hr>
+                    <h4> Vous devez être <a href="{{ path('app_login') }}">connecté(e)</a> pour poster un commentaire.
+                    </h4>
+
+                    {% endif %}
+
+                    <a href="{{ path('blog') }}">Retour</a>
+
+                </div>
+            </div>
+
+    </article>
+{% endblock %}
